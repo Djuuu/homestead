@@ -20,6 +20,10 @@ sites:
 databases:
     - homestead
 
+#adminer: true
+
+#mailhog: true
+
 # blackfire:
 #     - id: foo
 #       token: bar

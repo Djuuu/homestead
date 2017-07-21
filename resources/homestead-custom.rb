@@ -9,6 +9,9 @@ class Homestead
 
     def Homestead.custom_post(config, settings)
 
+        # Configure Local Variable To Access Scripts From Remote Location
+        scriptDir = File.dirname(__FILE__)
+
         # cache
         if Vagrant.has_plugin?("vagrant-cachier")
             config.cache.scope = :box
@@ -33,6 +36,20 @@ class Homestead
                 end
             end
             config.hostmanager.aliases = hosts
+        end
+
+        # Install Adminer if necessary
+        if settings.has_key?("adminer") && settings["adminer"]
+            config.vm.provision "shell" do |s|
+                s.path = scriptDir + "/scripts/install-adminer.sh"
+            end
+        end
+
+        # Install Mailhog if necessary
+        if settings.has_key?("mailhog") && settings["mailhog"]
+            config.vm.provision "shell" do |s|
+                s.path = scriptDir + "/scripts/install-mailhog.sh"
+            end
         end
 
         # message
