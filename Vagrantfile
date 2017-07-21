@@ -14,6 +14,11 @@ aliasesPath = confDir + "/aliases"
 
 require File.expand_path(File.dirname(__FILE__) + '/scripts/homestead.rb')
 
+homesteadCustomPath = confDir + "/homestead-custom.rb"
+if File.exist? homesteadCustomPath then
+    require homesteadCustomPath
+end
+
 Vagrant.require_version '>= 1.9.0'
 
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
@@ -32,7 +37,15 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
         abort "Homestead settings file not found in #{confDir}"
     end
 
+    if defined? Homestead.custom_pre then
+        Homestead.custom_pre(config, settings)
+    end
+
     Homestead.configure(config, settings)
+
+    if defined? Homestead.custom_post then
+        Homestead.custom_post(config, settings)
+    end
 
     if File.exist? afterScriptPath then
         config.vm.provision "shell", path: afterScriptPath, privileged: false

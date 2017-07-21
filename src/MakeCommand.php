@@ -71,6 +71,10 @@ class MakeCommand extends Command
             $this->createVagrantfile();
         }
 
+        if (! $this->customHomesteadScriptExists()) {
+            $this->createCustomHomesteadScript();
+        }
+
         if (! $input->getOption('no-aliases') && ! $this->aliasesFileExists()) {
             $this->createAliasesFile();
         }
@@ -126,6 +130,26 @@ class MakeCommand extends Command
     protected function createVagrantfile()
     {
         copy(__DIR__.'/../resources/localized/Vagrantfile', "{$this->basePath}/Vagrantfile");
+    }
+
+    /**
+     * Determine if the custom homestead script exists.
+     *
+     * @return bool
+     */
+    protected function customHomesteadScriptExists()
+    {
+        return file_exists("{$this->basePath}/homestead-custom.rb");
+    }
+
+    /**
+     * Create a Vagrantfile.
+     *
+     * @return void
+     */
+    protected function createCustomHomesteadScript()
+    {
+        copy(__DIR__.'/../resources/homestead-custom.rb', "{$this->basePath}/homestead-custom.rb");
     }
 
     /**

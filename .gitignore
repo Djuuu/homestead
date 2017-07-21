@@ -3,5 +3,6 @@
 phpunit.xml
 /Homestead.yaml
 /Homestead.json
+/homestead-custom.rb
 /after.sh
 /aliases
